@@ -69,6 +69,7 @@ case "$1" in
 
   update)
     echo SERVICE_NAME-TYPE is $SERVICE_NAME-$TYPE
+    docker-compose --file cmds.yml run ecs-cli ps --region us-east-1 --cluster limbo
     if (docker-compose --file cmds.yml run ecs-cli ps --region us-east-1 --cluster limbo \
          | grep RUNNING | grep $SERVICE_NAME); then
       bin/ecr_push.sh
