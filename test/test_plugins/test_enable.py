@@ -20,7 +20,7 @@ class EnableTest(unittest.TestCase):
         server.config = {'pluginpath': plugindir}
         ret = on_message({"text": u"!enable help,enable"}, server)
         assert ret == "enabling plugins: help,enable"
-        init_plugins_mock.assert_called_with(plugindir, ['help','enable'])
+        init_plugins_mock.assert_called_with(plugindir, ['enable','help'])
 
     @mock.patch('enable.init_plugins')
     def test_star(self, init_plugins_mock):
@@ -30,3 +30,12 @@ class EnableTest(unittest.TestCase):
         ret = on_message({"text": u"!enable *"}, server)
         assert ret == "enabling all plugins"
         init_plugins_mock.assert_called_with(plugindir, None)
+
+    @mock.patch('enable.init_plugins')
+    def test_enable_missing(self, init_plugins_mock):
+        plugindir = 'test/plugindir'
+        server = Mock()
+        server.config = {'pluginpath': plugindir}
+        ret = on_message({"text": u"!enable dog,help,dog"}, server)
+        assert ret == "enabling plugins: dog,help,dog"
+        init_plugins_mock.assert_called_with(plugindir, ['dog','enable','help'])

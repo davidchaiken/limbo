@@ -22,6 +22,9 @@ def on_message(msg, server):
         response = "enabling all plugins"
     else:
         plugins_to_load = plugins.replace(' ', ',').replace(';',',').split(',')
+        plugins_to_load.append('enable') # always add enable
+        plugins_to_load = list(set(plugins_to_load)) # uniquify
+        plugins_to_load.sort() # mostly to enable testing
         response = "enabling plugins: {0}".format(plugins)
 
     logger.info("init_plugins: {0}".format(plugins_to_load))
